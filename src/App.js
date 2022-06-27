@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
 const url = "https://restcountries.com//v3.1/";
-const weatherUrl = "https://api.openweathermap.org/data/2.5/weather?";
+const weatherUrl = "https://api.openweathermap.org/";
 const access_key = "03f5964a0fcf804dbf8dd8aa6b51b9af";
 function App() {
   const [loading, setLoading] = useState(true);
@@ -17,6 +17,7 @@ function App() {
   const [weather, setWeather] = useState();
 
   useEffect(() => {
+    //fetch country data
     const fetchData = async () => {
       try {
         const response = await fetch(`${url}all`);
@@ -31,13 +32,14 @@ function App() {
   }, []);
 
   const clickHandler = async () => {
+    // fetch weather data
     setReadMore(!readMore);
     try {
       const response = await fetch(
-        `${weatherUrl}lat=${specific.capitalInfo.latlng[0]}&lon=${specific.capitalInfo.latlng[1]}&appid=${access_key}`
+        `${weatherUrl}data/2.5/weather?lat=${specific.capitalInfo.latlng[0]}&lon=${specific.capitalInfo.latlng[1]}&appid=${access_key}`
       );
-
       const data = await response.json();
+      console.log(data);
       setWeather(data);
     } catch (error) {
       console.log(error);
@@ -54,17 +56,22 @@ function App() {
 
   return (
     <main>
+      {/* title */}
       <div className="title">
         <h1>countries</h1>
         <div className="underline"></div>
       </div>
+
+      
+
+      {/* auto complete for searching countries */}
       <div className="selectbox-container">
         <Autocomplete
           id="country-select-demo"
           sx={{ width: 300 }}
           options={countries}
           autoHighlight
-          getOptionLabel={(option) => option.name.common} 
+          getOptionLabel={(option) => option.name.common}
           onChange={(event, newValue) => {
             setSpecific(newValue);
             setReadMore(false);
@@ -94,6 +101,9 @@ function App() {
         />
       </div>
 
+
+
+      {/* render country details  */}
       {specific ? (
         <div className="single-country">
           <img src={specific.flags.svg} alt="flag" />
@@ -112,7 +122,14 @@ function App() {
                 <p>Temperatures : {weather?.main.temp} F</p>
                 <p>Minimum temperatures : {weather?.main.temp_min} F</p>
                 <p>Maximum temperatures : {weather?.main.temp_max} F</p>
-                <p>Weather type : {weather?.weather[0].description}</p>
+                <div className="weather-desc">
+                  <p>Weather type : {weather?.weather[0].description}</p>
+                  <img
+                    src={`https://openweathermap.org/img/wn/${weather?.weather[0].icon}.png`}
+                    alt="icon"
+                  />
+                </div>
+
                 <p>Humidity : {weather?.main.humidity} </p>
                 <p>Visibility : {weather?.visibility} </p>
               </>

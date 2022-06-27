@@ -156,7 +156,7 @@ main {
 .single-country:hover {
   box-shadow: var(--dark-shadow);
 }
-.single-country img {
+.single-country > img {
   width: 100%;
   height: 20rem;
   object-fit: cover;
@@ -180,6 +180,10 @@ main {
 }
 .single-country footer {
   padding: 1.5rem 2rem;
+}
+.weather-desc {
+  display : flex;
+  justify-content: space-between;
 }
 .single-country .read-more {
   display: block;
